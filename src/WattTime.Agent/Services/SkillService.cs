@@ -18,6 +18,8 @@ namespace WattTime.Agent.Services
 
         private static List<IRequestHandler> Handlers = new List<IRequestHandler>()
         {
+            new LaunchRequestHandler(),
+            new StopIntentHandler(),
             new UnknownIntentHandler(),
         };
 
@@ -61,6 +63,10 @@ namespace WattTime.Agent.Services
             var response = await handler.Handle(_context, request);
 
             // Keep track of the handler to help with debugging.
+            if (response.SessionAttributes == null)
+            {
+                response.SessionAttributes = request.Session.Attributes ?? new Dictionary<string, object>();
+            }
             response.SessionAttributes["Handler"] = handler.GetType().Name;
 
             // Make sure each response has a version.
@@ -116,21 +122,12 @@ namespace WattTime.Agent.Services
         {
             return Task.FromResult(new SkillResponse()
             {
-                Version = ResponseVersion,
-                // Pass through session state intact.
-                SessionAttributes = request.Session.Attributes,
                 Response = new ResponseBody()
                 {
-                    ShouldEndSession = false,
-                    OutputSpeech = new SsmlOutputSpeech()
+                    ShouldEndSession = true,
+                    OutputSpeech = new PlainTextOutputSpeech
                     {
-                        Ssml =
-@"<speak>
-  <p>
-    There was a problem processing your request. 
-    Please try again later.
-  </p>
-</speak>"
+                        Text = "There was a problem processing your request. Please try again later."
                     }
                 }
             });

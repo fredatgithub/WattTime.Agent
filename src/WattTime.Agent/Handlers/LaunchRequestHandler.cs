@@ -14,6 +14,8 @@ using System.Net;
 using Alexa.NET;
 using BingMapsRESTToolkit;
 using Microsoft.Extensions.Configuration;
+using Microsoft.ApplicationInsights;
+using Newtonsoft.Json;
 
 namespace WattTime.Agent.Handlers
 {
@@ -26,8 +28,7 @@ namespace WattTime.Agent.Handlers
         {
             var skillSurveyService = context.GetService<IWattTimeService>();
             var configuration = context.GetService<IConfiguration>();
-
-            var intent = ((IntentRequest)request.Request).Intent;
+            var logger = context.GetService<TelemetryClient>();
 
             var addressInformationClient = new SkillAddressInformationClient(
                 new Uri(request.Context.System.ApiEndpoint, UriKind.Absolute),
@@ -55,6 +56,16 @@ namespace WattTime.Agent.Handlers
                 var location = mapsResponse.ResourceSets.FirstOrDefault()?.Resources.FirstOrDefault() as Location;
                 var coordinates = location.GeocodePoints.FirstOrDefault()?.Coordinates;
 
+                if (coordinates == null)
+                {
+                    logger.TrackEvent("NoCoordinates", new Dictionary<string, string>()
+                    {
+                        ["location"] = JsonConvert.SerializeObject(location)
+                    });
+
+                    return ResponseBuilder.Tell($"I'm sorry. I couldn't look up your location.");
+                }
+
                 var credentials = new BasicAuthenticationCredentials()
                 {
                     UserName = configuration["Authentication:WattTime:Username"],
@@ -66,9 +77,20 @@ namespace WattTime.Agent.Handlers
 
                 var client = new WattTimeClient(tokenCredentials);
 
-                var ba = await client.GetBalancingAuthorityByLocationAsync(coordinates[0], coordinates[1]);
-                var index = await client.GetIndexAsync(ba.Abbrev, "percent");
+                var balancingAuthority = await client.GetBalancingAuthorityByLocationAsync(coordinates[0], coordinates[1]);
 
+                if (balancingAuthority == null)
+                {
+                    logger.TrackEvent("NoBalancingAuthorityArea", new Dictionary<string, string>()
+                    {
+                        ["address"] = JsonConvert.SerializeObject(countryandPostalCode),
+                        ["location"] = JsonConvert.SerializeObject(location)
+                    });
+
+                    return ResponseBuilder.Tell($"I'm sorry. Carbon emission is not being tracked in your area.");
+                }
+
+                var index = await client.GetIndexAsync(balancingAuthority.Abbrev, "percent");
 
                 return ResponseBuilder.Tell(
                     $"On the percentage scale where 0 means extremely clean and 100 means extremely dirty the index for your location is {index.Percent}.");

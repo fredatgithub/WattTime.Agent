@@ -22,7 +22,8 @@
 
         public static class Intent
         {
-            public const string Stop = "AMAZON.Stop";
+            public const string Stop = "AMAZON.StopIntent";
+            public const string Cancel = "AMAZON.CancelIntent";
         }
     }
 }

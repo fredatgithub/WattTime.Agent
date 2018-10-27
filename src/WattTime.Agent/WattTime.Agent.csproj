@@ -6,13 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="_Generated\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Alexa.NET" Version="1.5.4" />
     <PackageReference Include="Alexa.NET.Security.Middleware" Version="1.0.0" />
+    <PackageReference Include="BingMapsRESTToolkit" Version="1.1.4" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.5.1" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.5" />
     <PackageReference Include="Microsoft.Rest.ClientRuntime" Version="2.3.17" />

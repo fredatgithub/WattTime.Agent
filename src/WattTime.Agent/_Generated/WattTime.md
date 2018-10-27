@@ -2,9 +2,9 @@
 
 ``` yaml 
 input-file: WattTime.json
+add-credentials: true
 
 csharp:
-  add-credentials: true
   namespace: WattTime.Agent.Services.Client
   output-folder: WattTimeClient
 ```

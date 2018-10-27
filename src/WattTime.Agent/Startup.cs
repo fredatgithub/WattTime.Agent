@@ -23,6 +23,7 @@ namespace WattTime.Agent
             services.AddMvc();
 
             services.AddSingleton(new TelemetryClient());
+            services.AddSingleton<IConfiguration>(Configuration);
             services.AddTransient<ISkillService, SkillService>();
         }
 

@@ -7,6 +7,8 @@
 namespace WattTime.Agent.Services.Client
 {
     using Models;
+    using System.Collections;
+    using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -40,6 +42,36 @@ namespace WattTime.Agent.Services.Client
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
+            /// <param name='latitude'>
+            /// </param>
+            /// <param name='longitude'>
+            /// </param>
+            public static BalancingAuthority GetBalancingAuthorityByLocation(this IWattTimeClient operations, double latitude, double longitude)
+            {
+                return operations.GetBalancingAuthorityByLocationAsync(latitude, longitude).GetAwaiter().GetResult();
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='latitude'>
+            /// </param>
+            /// <param name='longitude'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<BalancingAuthority> GetBalancingAuthorityByLocationAsync(this IWattTimeClient operations, double latitude, double longitude, CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.GetBalancingAuthorityByLocationWithHttpMessagesAsync(latitude, longitude, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
             /// <param name='ba'>
             /// </param>
             /// <param name='style'>
@@ -64,6 +96,40 @@ namespace WattTime.Agent.Services.Client
             public static async Task<Index> GetIndexAsync(this IWattTimeClient operations, string ba, string style, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetIndexWithHttpMessagesAsync(ba, style, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='ba'>
+            /// </param>
+            /// <param name='starttime'>
+            /// </param>
+            /// <param name='endtime'>
+            /// </param>
+            public static IList<Data> GetData(this IWattTimeClient operations, string ba, System.DateTime starttime, System.DateTime endtime)
+            {
+                return operations.GetDataAsync(ba, starttime, endtime).GetAwaiter().GetResult();
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='ba'>
+            /// </param>
+            /// <param name='starttime'>
+            /// </param>
+            /// <param name='endtime'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<IList<Data>> GetDataAsync(this IWattTimeClient operations, string ba, System.DateTime starttime, System.DateTime endtime, CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.GetDataWithHttpMessagesAsync(ba, starttime, endtime, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }

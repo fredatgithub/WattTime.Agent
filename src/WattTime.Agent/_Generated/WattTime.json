@@ -28,6 +28,54 @@
         }
       }
     },
+    "/v2/ba-from-loc": {
+      "get": {
+        "operationId": "getBalancingAuthorityByLocation",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "latitude",
+            "in": "query",
+            "required": true,
+            "type": "number",
+            "format": "double"
+          },
+          {
+            "name": "longitude",
+            "in": "query",
+            "required": true,
+            "type": "number",
+            "format": "double"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request was successful",
+            "schema": {
+              "$ref": "#/definitions/BalancingAuthority"
+            }
+          },
+          "400": {
+            "description": "The request could not be understood or was missing required parameters."
+          },
+          "401": {
+            "description": "Authentication failed or user doesn't have permissions for requested operation."
+          },
+          "403": {
+            "description": "Access denied."
+          },
+          "404": {
+            "description": "Resource was not found."
+          },
+          "405": {
+            "description": "Requested method is not supported for resource."
+          }
+        }
+      }
+
+    },
     "/v2/index": {
       "get": {
         "operationId": "getIndex",
@@ -52,7 +100,6 @@
               "switch"
             ]
           }
-
         ],
         "responses": {
           "200": {
@@ -76,12 +123,63 @@
           "405": {
             "description": "Requested method is not supported for resource."
           }
-        },
-        "security": [
+        }
+      }
+    },
+    "/v2/data": {
+      "get": {
+        "operationId": "getData",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
           {
-            "bearer": []
+            "name": "ba",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "starttime",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "endtime",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "format": "date-time"
           }
-        ]
+        ],
+        "responses": {
+          "200": {
+            "description": "The request was successful",
+            "schema": {
+              "type": "array",
+              "items": {
+              "$ref": "#/definitions/Data"
+              }
+            }
+          },
+          "400": {
+            "description": "The request could not be understood or was missing required parameters."
+          },
+          "401": {
+            "description": "Authentication failed or user doesn't have permissions for requested operation."
+          },
+          "403": {
+            "description": "Access denied."
+          },
+          "404": {
+            "description": "Resource was not found."
+          },
+          "405": {
+            "description": "Requested method is not supported for resource."
+          }
+        }
       }
     }
   },
@@ -96,6 +194,20 @@
     "Token": {
       "properties": {
         "token": {
+          "type": "string"
+        }
+      }
+    },
+    "BalancingAuthority": {
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "abbrev": {
+          "type": "string"
+        },
+        "name": {
           "type": "string"
         }
       }
@@ -127,6 +239,45 @@
         },
         "market": {
           "type": "string"
+        }
+      }
+    },
+    "Data": {
+      "properties": {
+        "point_time": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "value": {
+          "type": "number",
+          "format": "double"
+        },
+        "frequency": {
+          "type": "number",
+          "format": "int32"
+        },
+        "market": {
+          "type": "string"
+        },
+        "ba": {
+          "type": "string"
+        },
+        "datatype": {
+          "type": "string",
+          "enum": [
+            "MOER",
+            "GENERATION",
+            "EXPORT",
+            "IMPORT",
+            "GEN_RENEW",
+            "LOAD",
+            "LMP",
+            "LMP_ENE",
+            "LMP_LOSS",
+            "LMP_CONG",
+            "LMP_GHG",
+            "TEMP_C"
+          ]
         }
       }
     }

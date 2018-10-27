@@ -33,6 +33,12 @@ namespace WattTime.Agent.Services.Client
         /// </summary>
         JsonSerializerSettings DeserializationSettings { get; }
 
+        /// <summary>
+        /// Subscription credentials which uniquely identify client
+        /// subscription.
+        /// </summary>
+        ServiceClientCredentials Credentials { get; }
+
 
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -41,6 +47,18 @@ namespace WattTime.Agent.Services.Client
         /// The cancellation token.
         /// </param>
         Task<HttpOperationResponse<Token>> GetTokenWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <param name='latitude'>
+        /// </param>
+        /// <param name='longitude'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        Task<HttpOperationResponse<BalancingAuthority>> GetBalancingAuthorityByLocationWithHttpMessagesAsync(double latitude, double longitude, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <param name='ba'>
         /// </param>
@@ -54,6 +72,20 @@ namespace WattTime.Agent.Services.Client
         /// The cancellation token.
         /// </param>
         Task<HttpOperationResponse<Index>> GetIndexWithHttpMessagesAsync(string ba, string style, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <param name='ba'>
+        /// </param>
+        /// <param name='starttime'>
+        /// </param>
+        /// <param name='endtime'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        Task<HttpOperationResponse<IList<Data>>> GetDataWithHttpMessagesAsync(string ba, System.DateTime starttime, System.DateTime endtime, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
     }
 }

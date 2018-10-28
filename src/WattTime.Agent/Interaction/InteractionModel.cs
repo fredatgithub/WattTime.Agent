@@ -24,6 +24,12 @@
         {
             public const string Stop = "AMAZON.StopIntent";
             public const string Cancel = "AMAZON.CancelIntent";
+
+            public const string CanTurnOn = "CanITurnOn";
+            public const string WhenIsGoodTimeToTurnOn = "WhenIsGoodTimeToTurnOnIntent";
+
+            public const string CanDoActivity = "CanDoActivityIntent";
+            public const string WhenIsGoodTimeToDoActivity = "WhenIsGoodTimeToDoActivityIntent";
         }
     }
 }

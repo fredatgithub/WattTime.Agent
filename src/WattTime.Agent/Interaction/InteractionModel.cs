@@ -26,10 +26,10 @@
             public const string Cancel = "AMAZON.CancelIntent";
 
             public const string CanTurnOn = "CanITurnOn";
-            public const string WhenIsGoodTimeToTurnOn = "WhenIsGoodTimeToTurnOnIntent";
+            public const string WhenCanTurnOn = "WhenCanITurnOn";
 
-            public const string CanDoActivity = "CanDoActivityIntent";
-            public const string WhenIsGoodTimeToDoActivity = "WhenIsGoodTimeToDoActivityIntent";
+            public const string CanDo = "CanDoIntent";
+            public const string WhenCanDo = "WhenCanDoIntent";
         }
     }
 }
